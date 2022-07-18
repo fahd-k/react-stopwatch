@@ -19,7 +19,7 @@ export const initialState = {
       case "ADD_LAP":
         let newLap = {
             lapNum: state.lapRecords.length + 1,
-            lapTime: state.timerCount - state.lapRecords.reduce((accumulator, lap) => accumulator + lap.isRunning, 0),
+            lapTime: state.timerCount - state.lapRecords.reduce((lap, index) => lap + index.isRunning, 0),
           }
           return {
             ...state,
