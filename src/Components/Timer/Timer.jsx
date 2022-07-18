@@ -1,19 +1,14 @@
 import React from "react";
+import "./Timer.css"
+import { formattedTime } from "../../Format";
 
-export default function Timer(props) {
+
+export default function Timer(stopWatchTime) {
     return (
-        <div class="container">
-        <div class="face">
-          <div class="stopwatch">
-            <div class="timer-wrapper">
-              <h1 class="timer">
-              <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-              <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-              <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>       
-              </h1>
-            </div>
-        </div>
-    </div>
-</div>
+    <body>
+      <div class="timer-wrapper">
+        <h1 class="timer">{stopWatchTime ? formattedTime(stopWatchTime) : '00:00.00'}</h1>
+      </div>
+      </body>
     );
   }

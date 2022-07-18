@@ -1,51 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import "./App.css";
 import { formattedTime } from "./Format.js";
-
-const initialLaps = {
-  maxLap: {lapNum: 0, lapTime: 0},
-  minLap: {lapNum: 0, lapTime: Number.MAX_VALUE}
-}
-
-const start = "Start";
-const reset = "Reset";
-const stop = "Stop";
-const lap = "Lap";
+import timerReducer from "./Reducer/Reducer.jsx";
+import { initialState } from "./Reducer/Reducer.jsx";
+import Timer from "./Components/Timer/Timer";
+import Buttons from "./Components/Buttons/Buttons";
+import Laps from "./Components/Laps/Laps";
 
 
 const Stopwatch = () => {
-  const [time, setTime] = useState(0);
-  // const [running, isRunning] = useState(false);
+  const [state, dispatch] = useReducer(timerReducer, initialState)
   const [timeElapsed, setTimeElapsed] = useState(0)
   const [laps, setLaps] = useState([]);
   const [lapDuration, setLapDuration] = useState(0);
-  const [lapRecords, setLapRecords] = useState(initialLaps)
+  const [lapRecords, setLapRecords] = useState(initialState)
 
   useEffect(() => {
-    if (time) {
-      const interval = setInterval(runTimer, 1000 / 60)
-      return () => clearInterval(interval)
-    }
-    // eslint-disable-next-line
-  }, [time])
-
-  useEffect(() => {
-    if (timeElapsed) {
-      lapRunner()
-    }
-    // eslint-disable-next-line
-  }, [timeElapsed])
-
-
-  const startTimer = () => {
-    if (!timeElapsed) {
-      handleLap()
-    }
-    setTime(Date.now())
-  };
+		if (state.isTimerRunning) {
+			const startTime = Date.now() - state.stopWatchTime
+			const intervalId = setInterval(() => {
+				dispatch({ type: "STOP_TIMER", stopWatchTime: Date.now() - startTime })
+			}, 1000 / 16)
+			return () => clearInterval(intervalId)
+		}
+	}, [state.isTimerRunning])
 
   const runTimer = () => {
-    setTimeElapsed(timeElapsed + (Date.now() - time))
+    setTimeElapsed(timeElapsed + (Date.now() - state.isTimerRunning))
   }
 
   //reset values
@@ -53,7 +34,7 @@ const Stopwatch = () => {
     setTimeElapsed(0)
     setLaps([])
     setLapDuration(0)
-    setLapRecords(initialLaps)
+    setLapRecords(initialState)
   }
 
   const lapRunner = () => {
@@ -110,55 +91,29 @@ const Stopwatch = () => {
     }
   }
 
-  const handleStartStop = () => time ? setTime(0) : startTimer()
-  const handleLapOrReset = time ? handleLap : resetStopWatch
-  const lapResetTextHandler = time ? lap : reset;
-  const startStopTextHandler = time ? stop : start;
-  const startStopButtonClassName = time ? "stopBtn" : "startBtn"
+  const onStartButtonClick = () => {
+		dispatch({ type: "START_TIMER" })
+	}
 
+	const onLapButtonClick = () => {
+		if (state.isTimerRunning) {
+			dispatch({ type: "ADD_LAP" })
+		} else {
+			dispatch({ type: "RESET_TIMER" })
+		}
+	}
 
   return (
     <body>
       <p>Made with ❤️ by Fahd</p>
-      <div className="container">
-        <div className="face">
-          <div className="stopwatch">
-            <div class="timer-wrapper">
-              <h1 class="timer">{formattedTime(timeElapsed)}</h1>
-            </div>
-
-            <div class="controls">
-              <button
-                onClick={handleLapOrReset}
-                className={`${lapResetTextHandler}`}
-                id="resetBtn"
-              >
-                {lapResetTextHandler}
-              </button>
-              <div class="slider"></div>
-
-              <button
-                onClick={handleStartStop}
-                className={`${startStopButtonClassName}`}
-              >
-                {startStopTextHandler}
-              </button>
-            </div>
-
-            <div class="lapsTracker">
-              <ul class="laps">
-                            <hr></hr>
-              <div class="lap-data">
-              <span>
-              {handleLapsDisplay}
-              {handleEmptyLapsDisplay()}
-              </span>
-              </div>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Timer stopWatchTime={state.stopWatchTime} />
+			<Buttons onLapButtonClick={onLapButtonClick} onStartButtonClick={onStartButtonClick} isTimerRunning={state.isTimerRunning} />
+			<Laps
+				stopWatchTime={state.stopWatchTime}
+				lapItems={state.lapItems}
+				fastestLap={state.maxLap}
+				slowestLap={state.minLap}
+			/>
     </body>
   );
 };
