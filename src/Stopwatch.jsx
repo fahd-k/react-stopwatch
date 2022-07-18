@@ -17,9 +17,9 @@ const Stopwatch = () => {
 
   useEffect(() => {
 		if (state.isTimerRunning) {
-			const startTime = Date.now() - state.stopWatchTime
+			const startTime = Date.now() - state.timerCount
 			const intervalId = setInterval(() => {
-				dispatch({ type: "STOP_TIMER", stopWatchTime: Date.now() - startTime })
+				dispatch({ type: "STOP_TIMER", timerCount: Date.now() - startTime })
 			}, 1000 / 16)
 			return () => clearInterval(intervalId)
 		}
@@ -106,10 +106,10 @@ const Stopwatch = () => {
   return (
     <body>
       <p>Made with ❤️ by Fahd</p>
-      <Timer stopWatchTime={state.stopWatchTime} />
+      <Timer timerCount={state.timerCount} />
 			<Buttons onLapButtonClick={onLapButtonClick} onStartButtonClick={onStartButtonClick} isTimerRunning={state.isTimerRunning} />
 			<Laps
-				stopWatchTime={state.stopWatchTime}
+				timerCount={state.timerCount}
 				lapItems={state.lapItems}
 				fastestLap={state.maxLap}
 				slowestLap={state.minLap}

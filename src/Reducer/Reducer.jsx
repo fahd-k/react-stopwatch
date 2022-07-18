@@ -1,7 +1,7 @@
 export const initialState = {
     isTimerRunning: false,
-      stopWatchTime: 0,
-      lapItems: [],
+    timerCount: 0,
+    lapItems: [],
     maxLap: {lapNum: 0, lapTime: 0},
     minLap: {lapNum: 0, lapTime: Number.MAX_VALUE}
   }
@@ -11,11 +11,11 @@ export const initialState = {
       case "START_TIMER":
         return { ...state, time: !state.time }
       case "STOP_TIMER":
-          return { ...state, stopWatchTime: action.stopWatchTime }
+          return { ...state, timerCount: timerCount }
       case "ADD_LAP":
         let newLap = {
             lapNumber: state.lapItems.length + 1,
-            time: state.stopWatchTime - state.lapItems.reduce((accumulater, lap) => accumulater + lap.time, 0),
+            time: state.timerCount - state.lapItems.reduce((accumulater, lap) => accumulater + lap.time, 0),
           }
           return {
             ...state,
