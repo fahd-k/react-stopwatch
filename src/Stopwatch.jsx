@@ -32,7 +32,7 @@ const Stopwatch = () => {
 			<Buttons handleLapReset={handleLapReset} handleStartStop={handleStartStop} isRunning={state.isRunning} />
 			<Laps
 				timerCount={state.timerCount}
-				lapItems={state.lapItems}
+				lapRecords={state.lapRecords}
 				maxLap={state.maxLap}
 				minLap={state.minLap}
 			/>

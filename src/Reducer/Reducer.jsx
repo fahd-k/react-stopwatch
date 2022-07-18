@@ -10,27 +10,20 @@ export const initialState = {
     switch (action.type) {
       case "START_TIMER":
         return { ...state, 
-            isRunning: !state.isRunning 
+            isRunning: true,
         };
       case "STOP_TIMER":
           return { ...state, 
-            timerCount: timerCount 
+            timerCount: false, 
         };
       case "ADD_LAP":
         let newLap = {
             lapNum: state.lapRecords.length + 1,
             lapTime: state.timerCount - state.lapRecords.reduce((lap, index) => lap + index.isRunning, 0),
           }
-          return {
-            ...state,
-              lapRecords: [newLap, ...state.lapRecords],
-              maxLap: newLap.lapTime < state.maxLap?.lapTime ? newLap : state.maxLap,
-              minLap: newLap.lapTime > state.minLap.lapTime ? newLap : state.minLap,
-          };
         case "RESET_TIMER":
-          return initialState
+          return initialState;
   
         default:
-          return initialState;
     }
   };
