@@ -12,3 +12,5 @@ export default function Timer(timerCount) {
       </body>
     );
   }
+
+  
