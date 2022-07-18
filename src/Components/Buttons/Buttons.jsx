@@ -2,29 +2,16 @@ import React from "react";
 import "./Buttons.css"
 
 
-export default function Buttons(handleStartStop, handleLapReset, isTimerRunning) {
-
-  const handleStartStop = () => {
-		dispatch({ type: "START_TIMER" })
-	}
-
-	const handleLapReset = () => {
-		if (state.isTimerRunning) {
-			dispatch({ type: "ADD_LAP" })
-		} else {
-			dispatch({ type: "RESET_TIMER" })
-		}
-	}
+export default function Buttons(isRunning, handleStartStop, handleLapReset) {
     
     return (
-      <body>
       <div class="controls">
               <button
                 onClick={() => handleLapReset()}
                 className='resetBtn'
                 id="resetBtn"
               >
-                {isTimerRunning ? 'Lap' : 'Reset'}
+                {isRunning ? 'Lap' : 'Reset'}
               </button>
 
               <div class="slider"></div>
@@ -33,9 +20,8 @@ export default function Buttons(handleStartStop, handleLapReset, isTimerRunning)
                 onClick={() => handleStartStop()}
                 className='startBtn'
               >
-                {isTimerRunning ? 'Stop' : 'Start'}
+                {isRunning ? 'Stop' : 'Start'}
               </button>
             </div>
-            </body>
     );
   }

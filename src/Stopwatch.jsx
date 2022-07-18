@@ -20,23 +20,45 @@ const Stopwatch = () => {
 		if (state.isRunning) {
 			const startTime = Date.now() - timeElapsed
 			const intervalID = setInterval(() => {
-				setTimeElapsed(Date.now() - startTime)
-			}, 16)
+        		dispatch({ type: "START_TIMER", timerCount: Date.now() - startTime })				
+			}, 60)
 			return () => clearInterval(intervalID)
 		}
 	}, [state.isRunning])
 
 
+	const handleStartStop = () => {
+		dispatch({ type: "START_TIMER" })
+	}
+
+	const handleLapReset = () => {
+		if (state.isTimerRunning) {
+			dispatch({ type: "ADD_LAP" })
+		} else {
+			dispatch({ type: "RESET_TIMER" })
+		}
+	}
+
   return (
     <body>
-      <Timer timerCount={state.timerCount} />
-			<Buttons handleLapReset={handleLapReset} handleStartStop={handleStartStop} isRunning={state.isRunning} />
-			<Laps
-				timerCount={state.timerCount}
-				lapRecords={state.lapRecords}
-				maxLap={state.maxLap}
-				minLap={state.minLap}
-			/>
+      <div className="container">
+        <div className="face">
+          <div className="stopwatch">
+            <Timer timerCount={state.timerCount} />
+            <Buttons
+              handleLapReset={handleLapReset}
+              handleStartStop={handleStartStop}
+              isRunning={state.isRunning}
+            />
+            <Laps
+              timerCount={state.timerCount}
+              lapRecords={state.lapRecords}
+              maxLap={state.maxLap}
+              minLap={state.minLap}
+            />
+          </div>
+        </div>
+      </div>
     </body>
   );
 };
