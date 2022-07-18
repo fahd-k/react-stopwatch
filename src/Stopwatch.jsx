@@ -10,17 +10,17 @@ import Laps from "./Components/Laps/Laps";
 
 const Stopwatch = () => {
   const [state, dispatch] = useReducer(timerReducer, initialState)
-  // const [timeElapsed, setTimeElapsed] = useState(0)
+  const [timeElapsed, setTimeElapsed] = useState(0)
   // const [laps, setLaps] = useState([]);
   // const [lapDuration, setLapDuration] = useState(0);
   // const [lapRecords, setLapRecords] = useState(initialState)
 
   useEffect(() => {
 		if (state.isRunning) {
-			const startTime = Date.now() - state.timerCount
+			const startTime = Date.now() - timeElapsed
 			const intervalID = setInterval(() => {
-				dispatch({ type: "START_TIMER", timerCount: Date.now() - startTime })
-			}, 1000 / 60)
+				setTimeElapsed(Date.now() - startTime)
+			}, 16)
 			return () => clearInterval(intervalID)
 		}
 	}, [state.isRunning])

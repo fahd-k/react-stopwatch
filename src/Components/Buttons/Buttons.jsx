@@ -9,13 +9,12 @@ export default function Buttons(handleStartStop, handleLapReset, isTimerRunning)
 	}
 
 	const handleLapReset = () => {
-		if (state.isTimerRunning) {
+		if (state.isRunning) {
 			dispatch({ type: "ADD_LAP" })
 		} else {
 			dispatch({ type: "RESET_TIMER" })
 		}
 	}
-    
     return (
       <body>
       <div class="controls">
@@ -24,7 +23,7 @@ export default function Buttons(handleStartStop, handleLapReset, isTimerRunning)
                 className='resetBtn'
                 id="resetBtn"
               >
-                {isTimerRunning ? 'Lap' : 'Reset'}
+                {isRunning ? 'Lap' : 'Reset'}
               </button>
 
               <div class="slider"></div>
@@ -33,7 +32,7 @@ export default function Buttons(handleStartStop, handleLapReset, isTimerRunning)
                 onClick={() => handleStartStop()}
                 className='startBtn'
               >
-                {isTimerRunning ? 'Stop' : 'Start'}
+                {isRunning ? 'Stop' : 'Start'}
               </button>
             </div>
             </body>
